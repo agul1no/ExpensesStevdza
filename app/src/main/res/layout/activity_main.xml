@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Spinner
+        android:id="@+id/spinnerMainMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/totalLabel"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp">
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/spinnerMainYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/totalLabel"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="50dp">
+
+    </Spinner>
+
+    <TextView
+        android:id="@+id/expensesmeter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Expenses Meter"
+        android:textColor="@color/light_blue_sky"
+        android:textSize="40sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/totalLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressbar"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:text="Total:"
+        android:textColor="@color/light_blue_sky"
+        android:textSize="34sp">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/totalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressbar"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="20dp"
+        android:text="186 €"
+        android:textColor="@color/light_blue_sky"
+        android:textSize="34sp">
+
+    </TextView>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zero"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:max="100"
+        android:progress="50"
+        android:progressTint="@color/light_blue_sky">
+
+    </ProgressBar>
+
+    <TextView
+        android:id="@+id/zero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="0 €"
+        android:textColor="@color/light_blue_sky"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/expensesmeter"
+        android:layout_marginTop="5dp">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/maximum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/expensesmeter"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:text="100 €"
+        android:textColor="@color/light_blue_sky"
+        android:textSize="30sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="250dp"
+        android:padding="20dp"
+        android:paddingTop="?attr/actionBarSize" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:contentDescription="TODO"
+        android:focusable="true"
+        app:backgroundTint="@color/light_blue"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="#FFF">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <ImageView
+        android:id="@+id/imageEmpty"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="340dp"
+        app:srcCompat="@drawable/ic_empty"
+        android:alpha="0.3"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/textNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Data"
+        android:layout_below="@+id/imageEmpty"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:alpha="0.3"
+        android:visibility="gone"/>
+
+</RelativeLayout>

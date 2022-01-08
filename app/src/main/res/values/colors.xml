@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_gray">#202020</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="light_blue_sky">#03A9F4</color>
+    <color name="dark_blue">#9C002698</color>
+    <color name="light_blue">#CB0053AC</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="my_color">#DD0202</color>
+</resources>
