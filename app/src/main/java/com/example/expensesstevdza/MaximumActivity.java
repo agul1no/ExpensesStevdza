@@ -31,7 +31,7 @@ public class MaximumActivity extends AppCompatActivity {
                     //TODO the value the user enters should be store in the database and call whenever the user runs the app till it would be changed
                     MyDataBaseHelper db = new MyDataBaseHelper(MaximumActivity.this);
                     db.createTableMaxAmount();
-                    db.addMaxAmount(Integer.parseInt(maxAmountInputEditText.getText().toString()));
+                    db.updateMaxAmount(Integer.parseInt(maxAmountInputEditText.getText().toString()));
                     maxAmountInputEditText.setText("");
                     Intent intent = new Intent(MaximumActivity.this,MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

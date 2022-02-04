@@ -50,11 +50,14 @@ public class UpdateActivity extends AppCompatActivity {
 
         ArrayList<String> months2 = new ArrayList<>();
 
-        for(int i = 0; i < 6 ; i++){
-            months2.add(new DateFormatSymbols().getMonths()[currentMonth - i]);
-            if(currentMonth == 0) { //January is the month 0
+        for (int i = 0; i < MainActivity.MAX_SPINNER_NUMBER ; i++) {
+            if (currentMonth == 0) { //January is the month 0
+                months2.add(new DateFormatSymbols().getMonths()[currentMonth]);
                 currentMonth = 12;
+            }else{
+                months2.add(new DateFormatSymbols().getMonths()[currentMonth]);
             }
+            currentMonth -= 1;
         }
 
         ArrayList<Integer> years2 = new ArrayList<>();

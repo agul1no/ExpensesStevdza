@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddActivity">
+    tools:context=".AddActivity"
+    android:theme="@style/Theme.ExpensesStevdza">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/expenseNameInputLayout"
@@ -19,6 +20,7 @@
         android:layout_marginEnd="60dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:hint="Name your expense"
+        android:focusable="true"
         app:helperText="Required"
         app:helperTextTextColor="@color/light_blue_sky"
         android:textColorHint="@color/light_blue_sky"
@@ -51,6 +53,7 @@
         app:counterMaxLength="5"
         app:endIconMode="clear_text"
         app:helperText="Required"
+        app:boxStrokeColor="?attr/colorSecondary"
         app:helperTextTextColor="@color/light_blue_sky"
         android:textColorHint="@color/light_blue_sky"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +81,7 @@
         app:endIconMode="clear_text"
         android:layout_marginTop="24dp"
         android:layout_marginStart="60dp"
+        app:boxStrokeColor="@color/light_blue_sky"
         android:textColorHint="@color/light_blue_sky"
         android:layout_marginEnd="60dp"
         app:layout_constraintTop_toBottomOf="@+id/expenseAmountInputLayout"

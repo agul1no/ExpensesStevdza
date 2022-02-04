@@ -32,10 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:text="Expenses Meter"
         android:textColor="@color/light_blue_sky"
-        android:textSize="40sp"
+        android:textSize="36sp"
         android:textStyle="bold">
 
     </TextView>
@@ -49,7 +49,7 @@
         android:layout_marginTop="20dp"
         android:text="Total:"
         android:textColor="@color/light_blue_sky"
-        android:textSize="34sp">
+        android:textSize="30sp">
 
     </TextView>
 
@@ -60,9 +60,9 @@
         android:layout_below="@+id/progressbar"
         android:layout_marginStart="200dp"
         android:layout_marginTop="20dp"
-        android:text="186 €"
+        android:text=" €"
         android:textColor="@color/light_blue_sky"
-        android:textSize="34sp">
+        android:textSize="30sp">
 
     </TextView>
 
@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/zero"
         android:layout_marginStart="30dp"
+        android:scaleY="3"
         android:layout_marginEnd="30dp"
         android:max="100"
         android:progress="50"
@@ -84,13 +85,13 @@
         android:id="@+id/zero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/expensesmeter"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="0 €"
         android:textColor="@color/light_blue_sky"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/expensesmeter"
-        android:layout_marginTop="5dp">
+        android:textSize="26sp"
+        android:textStyle="bold">
 
     </TextView>
 
@@ -106,7 +107,7 @@
         android:onClick="onClick"
         android:text="100 €"
         android:textColor="@color/light_blue_sky"
-        android:textSize="30sp"
+        android:textSize="26sp"
         android:textStyle="bold">
 
     </TextView>

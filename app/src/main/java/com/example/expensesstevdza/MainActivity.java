@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,27 +55,37 @@ public class MainActivity extends AppCompatActivity {
     public static int currentMonth = calendar.get(Calendar.MONTH);
     public static int currentYear = calendar.get(Calendar.YEAR);
 
+    public static final int MAX_SPINNER_NUMBER = 6;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //calling the databasehelper and creating the arrays for the recycler view
+        myDB = new MyDataBaseHelper(MainActivity.this);
+        expense_id = new ArrayList<>();
+        expenseName = new ArrayList<>();
+        expenseAmount = new ArrayList<>();
+        expenseComment = new ArrayList<>();
+        month = new ArrayList<>();
+        year = new ArrayList<>();
+
         maximum = findViewById(R.id.maximum);
         try {
-            //TODO check if the db exists, if don't create it and set maxAmount to 100, if it does exist read the value and set maxAmount to this value
             MyDataBaseHelper db = new MyDataBaseHelper(MainActivity.this);
             empty = db.checkIfMaxAmountTableIsEmpty();
 
-            if(empty){
+            if (empty) {
                 maximum.setText("100 €");
                 maxAmount = 100;
-                db.addMaxAmount(maxAmount);
-            }else {
-                db.readMaxAmount();
-                maxAmount = storeMaxAmountInVar();
+                db.insertMaxAmount(maxAmount);
+            } else {
+                maxAmount = db.readMaxAmount();
+                //storeMaxAmountInVar(maxAmount);
                 maximum.setText(maxAmount + " €");
             }
-        }catch (Exception e){
+        } catch (Exception e) { //TODO catch the exact exception
             Toast.makeText(MainActivity.this, "Error reading the Max Amount Value", Toast.LENGTH_LONG).show();
             maximum.setText("100 €");
             maxAmount = 100;
@@ -87,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         spinnerMainMonth = findViewById(R.id.spinnerMainMonth);
         spinnerMainYear = findViewById(R.id.spinnerMainYear);
         progressbar = findViewById(R.id.progressbar);
+//        progressbar.setMax(maxAmount);
+//        progressbar.setProgress((int) expenseCounter);
         totalAmount = findViewById(R.id.totalAmount);
         recView = findViewById(R.id.recView);
         fab = findViewById(R.id.fab);
@@ -103,18 +116,21 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> months = new ArrayList<>();
 
-        for(int i = 0; i < 6 ; i++){
-            months.add(new DateFormatSymbols().getMonths()[currentMonth - i]);
-            if(currentMonth == 0) { //January is the month 0
+        for (int i = 0; i < MAX_SPINNER_NUMBER ; i++) {
+            if (currentMonth == 0) { //January is the month 0
+                months.add(new DateFormatSymbols().getMonths()[currentMonth]);
                 currentMonth = 12;
+            }else{
+                months.add(new DateFormatSymbols().getMonths()[currentMonth]);
             }
+            currentMonth -= 1;
         }
 
         ArrayList<Integer> years = new ArrayList<>();
         years.add(currentYear);
-        years.add(currentYear-1);
+        years.add(currentYear - 1);
 
-        //setting the value of the spinners to the adapters
+        //creating the Adapters, setting the value of the arrays to the adapters, creating the spinners
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -134,18 +150,10 @@ public class MainActivity extends AppCompatActivity {
         selectedMonth = getSpinnerMonthItem();
         selectedYear = getSpinnerYearItem();
 
-        //calling the databasehelper and creating the arrays for the recycler view
-        myDB = new MyDataBaseHelper(MainActivity.this);
-        expense_id = new ArrayList<>();
-        expenseName = new ArrayList<>();
-        expenseAmount = new ArrayList<>();
-        expenseComment = new ArrayList<>();
-        month = new ArrayList<>();
-        year = new ArrayList<>();
 
         storeDataInArrays();
 
-        customAdapter = new CustomAdapter(MainActivity.this,this, expense_id,expenseName,expenseAmount, expenseComment, month, year);
+        customAdapter = new CustomAdapter(MainActivity.this, this, expense_id, expenseName, expenseAmount, expenseComment, month, year);
         recView.setAdapter(customAdapter);
         recView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -155,10 +163,15 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMonth = getSpinnerMonthItem();
                 selectedYear = getSpinnerYearItem();
-                expense_id.clear(); expenseName.clear(); expenseAmount.clear(); expenseComment.clear(); month.clear(); year.clear();
+                expense_id.clear();
+                expenseName.clear();
+                expenseAmount.clear();
+                expenseComment.clear();
+                month.clear();
+                year.clear();
                 myDB.readAllData();
                 storeDataInArrays();
-                customAdapter = new CustomAdapter(MainActivity.this,MainActivity.this, expense_id,expenseName,expenseAmount, expenseComment, month, year);
+                customAdapter = new CustomAdapter(MainActivity.this, MainActivity.this, expense_id, expenseName, expenseAmount, expenseComment, month, year);
                 recView.setAdapter(customAdapter);
                 recView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -175,10 +188,15 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMonth = getSpinnerMonthItem();
                 selectedYear = getSpinnerYearItem();
-                expense_id.clear(); expenseName.clear(); expenseAmount.clear(); expenseComment.clear(); month.clear(); year.clear();
+                expense_id.clear();
+                expenseName.clear();
+                expenseAmount.clear();
+                expenseComment.clear();
+                month.clear();
+                year.clear();
                 myDB.readAllData();
                 storeDataInArrays();
-                customAdapter = new CustomAdapter(MainActivity.this,MainActivity.this, expense_id,expenseName,expenseAmount, expenseComment, month, year);
+                customAdapter = new CustomAdapter(MainActivity.this, MainActivity.this, expense_id, expenseName, expenseAmount, expenseComment, month, year);
                 recView.setAdapter(customAdapter);
                 recView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -195,34 +213,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
+        if (requestCode == 1) {
             recreate();
         }
     }
 
-    void calculateTotalAmountAndSetProgressbar(){
+    void calculateTotalAmountAndSetProgressbar() {
         // calculate the total of the expenses of the selected month and set the progress bar
         expenseCounter = 0;
-        for(int i = 0; i < expenseAmount.size(); i++){
+        for (int i = 0; i < expenseAmount.size(); i++) {
             expenseCounter = expenseCounter + Double.parseDouble(expenseAmount.get(i));
         }
-        expenseCounter = (double) Math.round(expenseCounter * maxAmount) / maxAmount;
+        //expenseCounter = (double) Math.round(expenseCounter * maxAmount) / maxAmount;
+        progressbar.setMax(maxAmount);
         totalAmount.setText(String.valueOf(expenseCounter) + " €");
         progressbar.setProgress((int) expenseCounter);
     }
 
-    void updateRecyclerViewAfterSpinner(){
+    void updateRecyclerViewAfterSpinner() {
         customAdapter = null;
         storeDataInArrays();
     }
 
-    void storeDataInArrays (){
+    void storeDataInArrays() {
         Cursor cursor = myDB.readAllData();
-        if(cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
             imageEmpty.setVisibility(View.VISIBLE);
             textNoData.setVisibility(View.VISIBLE);
-        }else{
-            while (cursor.moveToNext()){
+        } else {
+            while (cursor.moveToNext()) {
                 expense_id.add(cursor.getString(0));
                 expenseName.add(cursor.getString(1));
                 expenseAmount.add(cursor.getString(2));
@@ -246,35 +265,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //delete all item
-        if(item.getItemId() == R.id.deleteAll){
+        if (item.getItemId() == R.id.deleteAll) {
             confirmDialogDeleteAll();
         }
 
         //About item
-        if(item.getItemId() == R.id.about){
+        if (item.getItemId() == R.id.about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
         }
 
         //Exit
-        if(item.getItemId() == R.id.exit){
+        if (item.getItemId() == R.id.exit) {
             exitMenu();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public static String getSpinnerMonthItem(){
+    public static String getSpinnerMonthItem() {
         String selectedMonth = spinnerMainMonth.getSelectedItem().toString();
         return selectedMonth;
     }
 
-    public static String getSpinnerYearItem(){
+    public static String getSpinnerYearItem() {
         String selectedYear = spinnerMainYear.getSelectedItem().toString();
         return selectedYear;
     }
 
-    void exitMenu(){
+    void exitMenu() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit the Application?");
         builder.setMessage("Are you sure you want to leave the application?");
@@ -294,14 +313,14 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    void confirmDialogDeleteAll(){
+    void confirmDialogDeleteAll() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete All Records ?");
         builder.setMessage("Are you sure you want to delete all the data?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                MyDataBaseHelper myDB = new MyDataBaseHelper(MainActivity.this);
+                //MyDataBaseHelper myDB = new MyDataBaseHelper(MainActivity.this);
                 myDB.deleteAllData();
                 //refresh Activity
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -327,20 +346,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Intent intent = new Intent(MainActivity.this,MaximumActivity.class);
+        Intent intent = new Intent(MainActivity.this, MaximumActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    int storeMaxAmountInVar (){
-        int maxAmount = 100;
+    int storeMaxAmountInVar(int maxAmount) {
         Cursor cursor = myDB.readAllData();
-        if(cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
             Toast.makeText(MainActivity.this, "The Max Amount is empty", Toast.LENGTH_SHORT).show();
             maxAmount = 100;
-        }else{
-            while (cursor.moveToNext()){
+        } else {
+            while (cursor.moveToNext()) {
                 maxAmount = Integer.parseInt(cursor.getString(0));
             }
         }

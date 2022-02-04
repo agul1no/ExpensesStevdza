@@ -43,11 +43,14 @@ public class AddActivity extends AppCompatActivity {
         //creating the value of the spinners
         ArrayList<String> months = new ArrayList<>();
 
-        for(int i = 0; i < 6 ; i++){
-            months.add(new DateFormatSymbols().getMonths()[currentMonth - i]);
-            if(currentMonth == 0) { //January is the month 0
+        for (int i = 0; i < MainActivity.MAX_SPINNER_NUMBER ; i++) {
+            if (currentMonth == 0) { //January is the month 0
+                months.add(new DateFormatSymbols().getMonths()[currentMonth]);
                 currentMonth = 12;
+            }else{
+                months.add(new DateFormatSymbols().getMonths()[currentMonth]);
             }
+            currentMonth -= 1;
         }
 
         ArrayList<Integer> years = new ArrayList<>();

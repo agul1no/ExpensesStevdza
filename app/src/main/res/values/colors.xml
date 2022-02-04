@@ -4,7 +4,18 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="light_blue_sky">#03A9F4</color>
     <color name="dark_blue">#9C002698</color>
-    <color name="light_blue">#CB0053AC</color>
+
+<!--    from the web-->
+    <color name="light_blue">#35A9F8</color>
+    <color name="light_blue_var">#57EBF8</color>
+    <color name="light_blue_pOn">#0093c4</color>
+
+    <color name="cyan">#84ffff</color>
+    <color name="cyan_var">#baffff</color>
+    <color name="cyan_pOn">#4bcbcc</color>
+
+
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="my_color">#DD0202</color>

@@ -115,18 +115,20 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM "+ TABLE_NAME);
     }
 
+
     public void createTableMaxAmount(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query2 = "CREATE TABLE IF NOT EXISTS " + TABLE_MAXAMOUNT + " (" + COLUMN_MAXAMOUNT + " INTEGER);";
+        String query2 = "CREATE TABLE IF NOT EXISTS " + TABLE_MAXAMOUNT + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MAXAMOUNT + " INTEGER);";
         db.execSQL(query2);
     }
 
-    void addMaxAmount (int maxAmount){
+    void insertMaxAmount(int maxAmount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_MAXAMOUNT, maxAmount);
 
-        long result = db.insert(TABLE_MAXAMOUNT,null, cv);
+        long result = db.insert(TABLE_MAXAMOUNT, null, cv);
+
         if(result == -1){
             Toast.makeText(context, "Error setting the Max. Amount", Toast.LENGTH_SHORT).show();
         }else{
@@ -134,7 +136,21 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    Cursor readMaxAmount (){
+    void updateMaxAmount(int maxAmount){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_MAXAMOUNT, maxAmount);
+
+        long result = db.update(TABLE_MAXAMOUNT, cv, "_id=?", new String[] {"1"});
+
+        if(result == -1){
+            Toast.makeText(context, "Error updating the Max. Amount", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Max. Amount updated successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected int readMaxAmount (){
         String query = "SELECT * FROM " + TABLE_MAXAMOUNT;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -142,8 +158,10 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         if(db != null){
             cursor = db.rawQuery(query,null);
         }
-
-        return cursor;
+        if (cursor != null && cursor.moveToNext()) {
+           return Integer.parseInt(cursor.getString(1));
+        }
+        return 100;
     }
 
     public boolean checkIfMaxAmountTableIsEmpty(){
